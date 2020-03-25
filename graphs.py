@@ -105,22 +105,26 @@ class Solution:
     def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
         graph = defaultdict(lambda : defaultdict(set))
         #want to be able to insert dict of multiple nested dicts with elements being sets 
-        
         red, blue = 0, 1
+        # want to introduce binary var 
         for st, end in red_edges:
             graph[st][red].add(end)
         for st, end in blue_edges:
             graph[st][blue].add(end)
+        #will always use the last node of the edge to determine whether the node exists in the graph, repeat 
+        #for all elements of the graph nodes 
         res = [math.inf] * n
-        
+        #math.inf returns a floating point positive infinity
+        #want to initialize all distances to positive infinity  
         q = deque([(0,red), (0,blue)])
+        # initialize deque as usual, but now require binary var7 
         level = -1
-        while q:
-            level += 1
+        while q: #while the transversal stack is not empty
+            level += 1 #level 
             size = len(q)
             for i in range(size):
                 node, color = q.popleft()
-                opp_color = color^1
+                opp_color = color^1 #caret operator / XOR 
                 res[node] = min(level, res[node])
                 neighbors = graph[node][opp_color]
                 for child in list(neighbors):
