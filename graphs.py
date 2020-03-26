@@ -111,19 +111,17 @@ class Solution:
             graph[st][red].add(end)
         for st, end in blue_edges:
             graph[st][blue].add(end)
-        #will always use the last node of the edge to determine whether the node exists in the graph, repeat 
         #for all elements of the graph nodes 
         res = [math.inf] * n
         #math.inf returns a floating point positive infinity
-        #want to initialize all distances to positive infinity  
         q = deque([(0,red), (0,blue)])
-        # initialize deque as usual, but now require binary var7 
+        # initialize deque as usual, but now require binary var
         level = -1
         while q: #while the transversal stack is not empty
-            level += 1 #level 
+            level += 1 
             size = len(q)
             for i in range(size):
-                node, color = q.popleft()
+                node, color = q.popleft() #compare node to min node poss 
                 opp_color = color^1 #caret operator / XOR 
                 res[node] = min(level, res[node])
                 neighbors = graph[node][opp_color]
@@ -132,6 +130,26 @@ class Solution:
                     q.append((child, opp_color))
         return [r if r != math.inf else -1 for r in res]
 
+
+def shortestAlternatingPaths(self, n: int, red_edges, blue_edges):
+    ans,visited=[-1]*n,{(0,'inf')}
+    graph=[[] for _ in range(n)] #used a nested list instead 
+    for u,v in red_edges:
+        graph[u].append((v,1))
+    for u,v in blue_edges:
+        graph[u].append((v,-1))
+    queue=[(0,'inf',0)]
+    while queue:
+        new=[]
+        for node,color,dist in queue:
+            if ans[node]==-1: 
+                ans[node]=dist # will take effect from the second iteration onwards 
+            for next_node, new_color in graph[node]:
+                if new_color!=color and (next_node,new_color) not in visited:
+                    new.append((next_node,new_color,dist+1))
+                    visited.add((next_node,new_color))
+        queue=new
+    return ans
 
 
 
@@ -250,7 +268,6 @@ def floy(A_and_n):
                     dist[i][j] = dist[i][k] + dist[k][j]
                     path[i][k] = k
     print(dist)
-
 
 """
 --------------------------------------------------------------------------------
