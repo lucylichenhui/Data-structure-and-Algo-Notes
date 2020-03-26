@@ -94,6 +94,7 @@ def bfs(G, s):
                 print(v)
 
 
+#=======================================================================================================================#
 # Ques and ans implenting BFS annnotated
 # Annotated: 25 March
 # Source : https://leetcode.com/problems/shortest-path-with-alternating-colors/discuss/339965/Python-BFS
@@ -138,19 +139,61 @@ def shortestAlternatingPaths(self, n: int, red_edges, blue_edges):
         graph[u].append((v,1))
     for u,v in blue_edges:
         graph[u].append((v,-1))
-    queue=[(0,'inf',0)]
+    queue=[(0,'inf',0)] 
     while queue:
         new=[]
-        for node,color,dist in queue:
+        for node,color,dist in queue: # Convention 
             if ans[node]==-1: 
-                ans[node]=dist # will take effect from the second iteration onwards 
+                ans[node]=dist # will take effect from the second iteration onwards, when new node is added
+                # also don't have to store this extra var 'dist' in the tuple: no? 多费complexity ha
             for next_node, new_color in graph[node]:
-                if new_color!=color and (next_node,new_color) not in visited:
-                    new.append((next_node,new_color,dist+1))
+                if new_color!=color and (next_node,new_color) not in visited: # while new colour is not colour and next node and new colour is not in the listed of visited node 
+                    new.append((next_node,new_color,dist+1)) 
                     visited.add((next_node,new_color))
         queue=new
     return ans
 
+
+#Source: https://leetcode.com/problems/shortest-path-with-alternating-colors/discuss/454669/Python-BFS-succinct-solution-with-explanation
+
+from collections import defaultdict, deque
+class Solution:
+    def shortestAlternatingPaths(self, n: int, red_edges: [[int]], blue_edges: [[int]]) -> [int]:
+        
+        # generate a graph
+        graph = defaultdict(set)
+        for i, j in red_edges:
+            graph[i].add(('r', j))
+        for i, j in blue_edges:
+            graph[i].add(('b', j))
+        
+        res = [-1] * n
+        
+        # BFS
+        q = deque([(None, 0, 0)]) # record (color, a_node, shortest dist from node 0 to a_node)
+        visited = set() # record (color, vertex) visited
+        while q:
+            # visit all nodes in q
+            last_color, v, dist = q.popleft()
+            visited.add((last_color, v))
+                
+            # specify the distance if hasn't been specified
+            if res[v] == -1:
+                res[v] = dist
+                
+            # traverse all child nodes
+            for color, child in graph[v]:
+                    
+                # skip visited edges and edges with the same color as last edge
+                if color == last_color or (color, child) in visited:
+                    continue
+                    
+                # add child nodes to a new queue
+                q.append((color, child, dist + 1))
+            
+        return res
+
+#=======================================================================================================================#
 
 
 """
