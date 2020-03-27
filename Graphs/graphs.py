@@ -325,10 +325,10 @@ class Solution:
         
         def bfs(i,j):
             visited[i][j]=1
-            queue = [(i,j)] #always hold indexes in a tuple 
+            queue = deque([(i,j)]) #always hold indexes in a tuple 
             while queue:
                 # print(queue)
-                point = queue.pop(0) 
+                point = queue.pop() 
                 i = point[0]
                 j = point[1] 
                 if i > 0 and visited[i-1][j] == 0 and grid[i-1][j] == "1" : # start from the top left hand corner 
@@ -449,6 +449,47 @@ def is_valid(binaryMatrix, row, col):
     rows = len(binaryMatrix)
     cols = len(binaryMatrix[0])
     return row >= 0 and row < rows and col >= 0 and col < cols
+
+
+class Solution:
+    
+    
+    def numIslands(self, grid: List[List[str]]) -> int:
+        global rows 
+        global column 
+        row=len(grid)
+        column=len(grid[0])
+        sol=0
+        visited=[[0 for i in range(column)] for i in range(row)]
+
+        
+        def populate(grid,c,r,visited): 
+            
+            def is_valid(rows,columns, c, r): 
+                return r>=0 and r<row and c>=0 and c<column
+    
+            
+            if not is_valid(row, column, c, r) or visited[r][c]==1 or grid[r][c]==0: 
+                    # false case 
+                return int(0)
+            
+            visited[r][c]=1 
+
+            populate(grid, c+1, r, visited)
+            populate(grid, c-1, r, visited)
+            populate(grid, c, r+1, visited)
+            populate(grid, c, r-1, visited)
+            return int(1)
+
+        for r in range(row): 
+            for c in range(column):
+                sol+=populate(grid,c,r,visited)
+                
+        return sol
+    
+    
+        
+
 
 #=================================================================================#
 #=================================================================================#
