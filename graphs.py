@@ -365,6 +365,15 @@ class Solution:
 
 #=================================================================================#
 #=================================================================================#
+#=================================================================================#
+#=================================================================================#
+#=================================================================================#
+#=================================================================================#
+#=================================================================================#
+#=================================================================================#
+
+
+#ISLAND PROBLEM 
 
 
 # Program to count islands in boolean 2D matrix 
@@ -404,11 +413,88 @@ class Graph:
         for k in range(8): 
             if self.isSafe(i + rowNbr[k], j + colNbr[k], visited): 
                 self.DFS(i + rowNbr[k], j + colNbr[k], visited) 
-  
-  
+
 
 #=================================================================================#
 #=================================================================================#
+
+def get_number_of_islands(binaryMatrix):
+    rows = len(binaryMatrix)
+    cols = len(binaryMatrix[0])
+    # you can use Set if you like
+    # or change the content of binaryMatrix as it is visited
+    visited = [[0 for col in range(cols)] for r in range(rows)]
+    number_of_island = 0
+    for row in range(rows):
+        for col in range(cols):
+            number_of_island += get_island(binaryMatrix, row, col, visited)
+    return number_of_island
+
+
+# get a continuous island
+def get_island(binaryMatrix, row, col, visited):
+    if not is_valid(binaryMatrix, row, col)
+        or visited[row][col] == 1 or binaryMatrix[row][col] == 0:
+        return 0
+
+    # mark as visited
+    visited[row][col] = 1
+    get_island(binaryMatrix, row, col + 1, visited)
+    get_island(binaryMatrix, row, col - 1, visited)
+    get_island(binaryMatrix, row + 1, col, visited)
+    get_island(binaryMatrix, row - 1, col, visited)
+    return 1
+
+def is_valid(binaryMatrix, row, col):
+    rows = len(binaryMatrix)
+    cols = len(binaryMatrix[0])
+    return row >= 0 and row < rows and col >= 0 and col < cols
+
+#=================================================================================#
+#=================================================================================#
+
+    # The main function that returns 
+    # count of islands in a given boolean 
+    # 2D matrix 
+    def countIslands(self): 
+        # Make a bool array to mark visited cells. 
+        # Initially all cells are unvisited 
+        visited = [[False for j in range(self.COL)]for i in range(self.ROW)] 
+  
+        # Initialize count as 0 and travese  
+        # through the all cells of 
+        # given matrix 
+        count = 0
+        for i in range(self.ROW): 
+            for j in range(self.COL): 
+                # If a cell with value 1 is not visited yet,  
+                # then new island found 
+                if visited[i][j] == False and self.graph[i][j] == 1: 
+                    # Visit all cells in this island  
+                    # and increment island count 
+                    self.DFS(i, j, visited) 
+                    count += 1
+  
+        return count 
+  
+  
+graph = [[1, 1, 0, 0, 0], 
+        [0, 1, 0, 0, 1], 
+        [1, 0, 0, 1, 1], 
+        [0, 0, 0, 0, 0], 
+        [1, 0, 1, 0, 1]] 
+  
+  
+row = len(graph) 
+col = len(graph[0]) 
+  
+g = Graph(row, col, graph) 
+  
+print "Number of islands is:"
+print g.countIslands() 
+  
+# This code is contributed by Neelam Yadav 
+#=======================================================================================================================#
 
 
 
@@ -488,85 +574,6 @@ print(largestRegion(M))
   
 # This code is contributed by PranchalK 
 
-
-#=================================================================================#
-#=================================================================================#
-
-def get_number_of_islands(binaryMatrix):
-    rows = len(binaryMatrix)
-    cols = len(binaryMatrix[0])
-    # you can use Set if you like
-    # or change the content of binaryMatrix as it is visited
-    visited = [[0 for col in range(cols)] for r in range(rows)]
-    number_of_island = 0
-    for row in range(rows):
-        for col in range(cols):
-            number_of_island += get_island(binaryMatrix, row, col, visited)
-    return number_of_island
-
-
-# get a continuous island
-def get_island(binaryMatrix, row, col, visited):
-    if not is_valid(binaryMatrix, row, col)
-        or visited[row][col] == 1 or binaryMatrix[row][col] == 0:
-        return 0
-
-    # mark as visited
-    visited[row][col] = 1
-    get_island(binaryMatrix, row, col + 1, visited)
-    get_island(binaryMatrix, row, col - 1, visited)
-    get_island(binaryMatrix, row + 1, col, visited)
-    get_island(binaryMatrix, row - 1, col, visited)
-    return 1
-
-
-def is_valid(binaryMatrix, row, col):
-    rows = len(binaryMatrix)
-    cols = len(binaryMatrix[0])
-    return row >= 0 and row < rows and col >= 0 and col < cols
-
-    # The main function that returns 
-    # count of islands in a given boolean 
-    # 2D matrix 
-    def countIslands(self): 
-        # Make a bool array to mark visited cells. 
-        # Initially all cells are unvisited 
-        visited = [[False for j in range(self.COL)]for i in range(self.ROW)] 
-  
-        # Initialize count as 0 and travese  
-        # through the all cells of 
-        # given matrix 
-        count = 0
-        for i in range(self.ROW): 
-            for j in range(self.COL): 
-                # If a cell with value 1 is not visited yet,  
-                # then new island found 
-                if visited[i][j] == False and self.graph[i][j] == 1: 
-                    # Visit all cells in this island  
-                    # and increment island count 
-                    self.DFS(i, j, visited) 
-                    count += 1
-  
-        return count 
-  
-  
-graph = [[1, 1, 0, 0, 0], 
-        [0, 1, 0, 0, 1], 
-        [1, 0, 0, 1, 1], 
-        [0, 0, 0, 0, 0], 
-        [1, 0, 1, 0, 1]] 
-  
-  
-row = len(graph) 
-col = len(graph[0]) 
-  
-g = Graph(row, col, graph) 
-  
-print "Number of islands is:"
-print g.countIslands() 
-  
-# This code is contributed by Neelam Yadav 
-#=======================================================================================================================#
 
 
 """
