@@ -193,6 +193,162 @@ class Solution:
             
         return res
 
+############################################
+############################################
+
+#My sol
+
+class Solution:
+    def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
+        graph=[[[],[]] for i in range(n)] 
+        red=0
+        blue=1
+        for u, v in red_edges: 
+            graph[u][red].append(v)
+        for u, v in blue_edges: 
+            graph[u][blue].append(v)
+        queue=deque([(0,red,0),(0,blue,0)])
+        ans=[-1]*n
+        visited=set()
+        
+        while queue: 
+            
+            node, lastcolour,dist=queue.popleft()
+            visited.add((lastcolour,node))
+            
+            if ans[node]==-1: 
+                ans[node]=dist 
+                
+            newcolour=lastcolour^1
+            for child in graph[node][newcolour] : 
+                if (newcolour, child) in visited: 
+                    continue 
+                
+                queue.append((child, newcolour,dist+1))
+        return ans
+            
+
+
+#############
+class Solution:
+    def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
+        R=collections.defaultdict(list)
+        B=collections.defaultdict(list)
+        for u,v in red_edges:
+            R[u]+=v,
+        for u,v in blue_edges:
+            B[u]+=v,
+        def mybfs(E):
+            ans=[1<<30]*n
+            l=0
+            vis=set()
+            cur=set([0])
+            e=0
+            while cur:
+                nxt=set()
+                for u in cur:
+                    ans[u]=min(ans[u],l)
+                    for v in E[e][u]:
+                        if (e,u,v) not in vis:
+                            nxt.add(v)
+                            vis.add((e,u,v))
+                cur=nxt
+                e^=1
+                l+=1
+            return ans
+        
+        r=mybfs([R,B])
+        b=mybfs([B,R])
+        o=[min(r[i],b[i]) for i in range(n)]
+        return [-1 if p==1<<30 else p for p in o]
+
+
+class Solution(object):
+    def shortestAlternatingPaths(self, n, red_edges, blue_edges):
+        """
+        :type n: int
+        :type red_edges: List[List[int]]
+        :type blue_edges: List[List[int]]
+        :rtype: List[int]
+        """
+        queue = [(0,0),(0,1)]
+        visited = [[0]*(n) for i in range(2)]
+        distance = [-1]*(n)
+
+        graph = collections.defaultdict(list)
+
+        for s,e in red_edges:
+                graph[s].append((e,0))
+        for s,e in blue_edges:
+                graph[s].append((e,1))
+        depth = 0
+        while queue:
+            new_queue = []
+            for i in range(len(queue)):
+                cn,c = queue.pop(0)
+                if visited[c][cn] == 0  :
+                    visited[c][cn] = 1
+                    if distance[cn] == -1: 
+                        distance[cn] = depth 
+                for nb,cb in graph[cn]:
+                    if cb == (1-c):
+                        if visited[cb][nb] == 0:
+                            new_queue.append((nb,cb))
+            depth += 1
+            queue = new_queue
+        return distance
+                             
+#===================================================================================================#
+
+#Island ques BFS solution 
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if grid == []: #base case solution  
+            return 0 
+        
+        n = len(grid) 
+        m = len(grid[0])
+        
+        visited = [[0] * m for i in range (n)] #m being row, n being column 
+        
+        def bfs(i,j):
+            visited[i][j]=1
+            queue = [(i,j)]
+            while queue :
+                # print(queue)
+                point = queue.pop(0) 
+                i = point[0]
+                j = point[1] 
+                if i > 0 and visited[i-1][j] == 0 and grid[i-1][j] == "1" :
+                    queue.append((i-1, j ))
+                    visited[i-1][j]=1
+                    
+                if j > 0 and visited[i][j-1] == 0 and grid[i][j-1] == "1" :
+                    queue.append((i, j-1 ))
+                    visited[i][j-1]=1
+                    
+                if i < n-1 and visited[i+1][j] == 0 and grid[i+1][j] == "1" :
+                    queue.append((i+1, j ))
+                    visited[i+1][j]=1
+                    
+                if j < m-1 and visited[i][j+1] == 0 and grid[i][j+1] == "1" :
+                    queue.append((i, j+1 ))
+                    visited[i][j+1]=1
+                
+            return
+        
+        count  =0 
+        # bfs(0,0)
+        # print(visited)
+        
+        for  i in range (n):
+            for j in range(m):
+                # print(visited)
+                if grid[i][j] == "1" and  visited[i][j]==0 :
+                    count +=1
+                    bfs(i,j)
+        
+        return count 
 #=======================================================================================================================#
 
 
