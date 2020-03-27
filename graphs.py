@@ -1,45 +1,45 @@
-# """
+"""
 
-# if __name__ == "__main__":
-#     # Accept No. of Nodes and edges
-#     n, m = map(int, input().split(" "))
+if __name__ == "__main__":
+    # Accept No. of Nodes and edges
+    n, m = map(int, input().split(" "))
 
-#     # Initialising Dictionary of edges
-#     g = {}
-#     for i in range(n):
-#         g[i + 1] = []
-
-
+    # Initialising Dictionary of edges
+    g = {}
+    for i in range(n):
+        g[i + 1] = []
 
 
-#     ----------------------------------------------------------------------------
-#         Accepting edges of Unweighted Directed Graphs
-#     ----------------------------------------------------------------------------
-# """
 
-#     for _ in range(m):
-#         x, y = map(int, input().strip().split(" "))
-#         g[x].append(y)
 
-#     """
-#     ----------------------------------------------------------------------------
-#         Accepting edges of Unweighted Undirected Graphs
-#     ----------------------------------------------------------------------------
-#     """
-#     for _ in range(m):
-#         x, y = map(int, input().strip().split(" "))
-#         g[x].append(y)
-#         g[y].append(x)
+    ----------------------------------------------------------------------------
+        Accepting edges of Unweighted Directed Graphs
+    ----------------------------------------------------------------------------
+"""
 
-#     """
-#     ----------------------------------------------------------------------------
-#         Accepting edges of Weighted Undirected Graphs
-#     ----------------------------------------------------------------------------
-#     """
-#     for _ in range(m):
-#         x, y, r = map(int, input().strip().split(" "))
-#         g[x].append([y, r])
-#         g[y].append([x, r])
+    for _ in range(m):
+        x, y = map(int, input().strip().split(" "))
+        g[x].append(y)
+
+    """
+    ----------------------------------------------------------------------------
+        Accepting edges of Unweighted Undirected Graphs
+    ----------------------------------------------------------------------------
+    """
+    for _ in range(m):
+        x, y = map(int, input().strip().split(" "))
+        g[x].append(y)
+        g[y].append(x)
+
+    """
+    ----------------------------------------------------------------------------
+        Accepting edges of Weighted Undirected Graphs
+    ----------------------------------------------------------------------------
+    """
+    for _ in range(m):
+        x, y, r = map(int, input().strip().split(" "))
+        g[x].append([y, r])
+        g[y].append([x, r])
 
 
 
@@ -193,43 +193,6 @@ class Solution:
             
         return res
 
-############################################
-############################################
-
-#My sol
-
-class Solution:
-    def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
-        graph=[[[],[]] for i in range(n)] 
-        red=0
-        blue=1
-        for u, v in red_edges: 
-            graph[u][red].append(v)
-        for u, v in blue_edges: 
-            graph[u][blue].append(v)
-        queue=deque([(0,red,0),(0,blue,0)])
-        ans=[-1]*n
-        visited=set()
-        
-        while queue: 
-            
-            node, lastcolour,dist=queue.popleft()
-            visited.add((lastcolour,node))
-            
-            if ans[node]==-1: 
-                ans[node]=dist 
-                
-            newcolour=lastcolour^1
-            for child in graph[node][newcolour] : 
-                if (newcolour, child) in visited: 
-                    continue 
-                
-                queue.append((child, newcolour,dist+1))
-        return ans
-            
-
-
-#############
 class Solution:
     def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
         R=collections.defaultdict(list)
@@ -297,10 +260,59 @@ class Solution(object):
             depth += 1
             queue = new_queue
         return distance
+
+
+############################################
+############################################
+
+#My sol
+
+class Solution:
+    def shortestAlternatingPaths(self, n: int, red_edges: List[List[int]], blue_edges: List[List[int]]) -> List[int]:
+        graph=[[[],[]] for i in range(n)] 
+        red=0
+        blue=1
+        for u, v in red_edges: 
+            graph[u][red].append(v)
+        for u, v in blue_edges: 
+            graph[u][blue].append(v)
+        queue=deque([(0,red,0),(0,blue,0)])
+        ans=[-1]*n
+        visited=set()
+        
+        while queue: 
+            
+            node, lastcolour,dist=queue.popleft()
+            visited.add((lastcolour,node))
+            
+            if ans[node]==-1: 
+                ans[node]=dist 
+                
+            newcolour=lastcolour^1
+            for child in graph[node][newcolour] : 
+                if (newcolour, child) in visited: 
+                    continue 
+                
+                queue.append((child, newcolour,dist+1))
+        return ans
+            
+
                              
 #===================================================================================================#
 
 #Island ques BFS solution 
+
+
+"""
+
+If we see a "1", we know that we have visited an island
+want to increment num island by sth we need to do 
+want to sink the islands we visit and sink them to 0
+Can use either dfs or bfs
+Recursive call so need to check indices are valid 
+
+"""
+
 class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
         if grid == []: #base case solution  
@@ -313,13 +325,13 @@ class Solution:
         
         def bfs(i,j):
             visited[i][j]=1
-            queue = [(i,j)]
-            while queue :
+            queue = [(i,j)] #always hold indexes in a tuple 
+            while queue:
                 # print(queue)
                 point = queue.pop(0) 
                 i = point[0]
                 j = point[1] 
-                if i > 0 and visited[i-1][j] == 0 and grid[i-1][j] == "1" :
+                if i > 0 and visited[i-1][j] == 0 and grid[i-1][j] == "1" : # start from the top left hand corner 
                     queue.append((i-1, j ))
                     visited[i-1][j]=1
                     
@@ -327,7 +339,7 @@ class Solution:
                     queue.append((i, j-1 ))
                     visited[i][j-1]=1
                     
-                if i < n-1 and visited[i+1][j] == 0 and grid[i+1][j] == "1" :
+                if i < n-1 and visited[i+1][j] == 0 and grid[i+1][j] == "1" : #start from the bottom right hand corner
                     queue.append((i+1, j ))
                     visited[i+1][j]=1
                     
@@ -349,6 +361,211 @@ class Solution:
                     bfs(i,j)
         
         return count 
+
+
+#=================================================================================#
+#=================================================================================#
+
+
+# Program to count islands in boolean 2D matrix 
+class Graph: 
+  
+    def __init__(self, row, col, g): 
+        self.ROW = row 
+        self.COL = col 
+        self.graph = g 
+  
+    # A function to check if a given cell  
+    # (row, col) can be included in DFS 
+    def isSafe(self, i, j, visited): 
+        # row number is in range, column number 
+        # is in range and value is 1  
+        # and not yet visited 
+        return (i >= 0 and i < self.ROW and 
+                j >= 0 and j < self.COL and 
+                not visited[i][j] and self.graph[i][j]) 
+              
+  
+    # A utility function to do DFS for a 2D  
+    # boolean matrix. It only considers 
+    # the 8 neighbours as adjacent vertices 
+    def DFS(self, i, j, visited): 
+  
+        # These arrays are used to get row and  
+        # column numbers of 8 neighbours  
+        # of a given cell 
+        rowNbr = [-1, -1, -1,  0, 0,  1, 1, 1]; 
+            colNbr = [-1,  0,  1, -1, 1, -1, 0, 1]; 
+          
+        # Mark this cell as visited 
+        visited[i][j] = True
+  
+        # Recur for all connected neighbours 
+        for k in range(8): 
+            if self.isSafe(i + rowNbr[k], j + colNbr[k], visited): 
+                self.DFS(i + rowNbr[k], j + colNbr[k], visited) 
+  
+  
+
+#=================================================================================#
+#=================================================================================#
+
+
+
+# Python3 program to find the length of the  
+# largest region in boolean 2D-matrix  
+  
+# A function to check if a given cell  
+# (row, col) can be included in DFS  
+def isSafe(M, row, col, visited): 
+    global ROW, COL 
+      
+    # row number is in range, column number is in  
+    # range and value is 1 and not yet visited  
+    return ((row >= 0) and (row < ROW) and
+            (col >= 0) and (col < COL) and 
+            (M[row][col] and not visited[row][col])) 
+  
+# A utility function to do DFS for a 2D  
+# boolean matrix. It only considers  
+# the 8 neighbours as adjacent vertices  
+def DFS(M, row, col, visited, count): 
+      
+    # These arrays are used to get row and column  
+    # numbers of 8 neighbours of a given cell  
+    rowNbr = [-1, -1, -1, 0, 0, 1, 1, 1]  
+    colNbr = [-1, 0, 1, -1, 1, -1, 0, 1]  
+  
+    # Mark this cell as visited  
+    visited[row][col] = True
+  
+    # Recur for all connected neighbours  
+    for k in range(8): 
+        if (isSafe(M, row + rowNbr[k],  
+                   col + colNbr[k], visited)): 
+                         
+            # increment region length by one  
+            count[0] += 1
+            DFS(M, row + rowNbr[k],  
+                col + colNbr[k], visited, count) 
+  
+# The main function that returns largest 
+# length region of a given boolean 2D matrix  
+def largestRegion(M): 
+    global ROW, COL 
+      
+    # Make a bool array to mark visited cells.  
+    # Initially all cells are unvisited  
+    visited = [[0] * COL for i in range(ROW)] 
+  
+    # Initialize result as 0 and travesle  
+    # through the all cells of given matrix  
+    result = -999999999999
+    for i in range(ROW): 
+        for j in range(COL): 
+              
+            # If a cell with value 1 is not  
+            if (M[i][j] and not visited[i][j]): 
+                  
+                # visited yet, then new region found  
+                count = [1]  
+                DFS(M, i, j, visited , count)  
+  
+                # maximum region  
+                result = max(result , count[0]) 
+    return result 
+  
+# Driver Code 
+ROW = 4
+COL = 5
+  
+M = [[0, 0, 1, 1, 0], 
+     [1, 0, 1, 1, 0],  
+     [0, 1, 0, 0, 0], 
+     [0, 0, 0, 0, 1]]  
+  
+print(largestRegion(M)) 
+  
+# This code is contributed by PranchalK 
+
+
+#=================================================================================#
+#=================================================================================#
+
+def get_number_of_islands(binaryMatrix):
+    rows = len(binaryMatrix)
+    cols = len(binaryMatrix[0])
+    # you can use Set if you like
+    # or change the content of binaryMatrix as it is visited
+    visited = [[0 for col in range(cols)] for r in range(rows)]
+    number_of_island = 0
+    for row in range(rows):
+        for col in range(cols):
+            number_of_island += get_island(binaryMatrix, row, col, visited)
+    return number_of_island
+
+
+# get a continuous island
+def get_island(binaryMatrix, row, col, visited):
+    if not is_valid(binaryMatrix, row, col)
+        or visited[row][col] == 1 or binaryMatrix[row][col] == 0:
+        return 0
+
+    # mark as visited
+    visited[row][col] = 1
+    get_island(binaryMatrix, row, col + 1, visited)
+    get_island(binaryMatrix, row, col - 1, visited)
+    get_island(binaryMatrix, row + 1, col, visited)
+    get_island(binaryMatrix, row - 1, col, visited)
+    return 1
+
+
+def is_valid(binaryMatrix, row, col):
+    rows = len(binaryMatrix)
+    cols = len(binaryMatrix[0])
+    return row >= 0 and row < rows and col >= 0 and col < cols
+
+    # The main function that returns 
+    # count of islands in a given boolean 
+    # 2D matrix 
+    def countIslands(self): 
+        # Make a bool array to mark visited cells. 
+        # Initially all cells are unvisited 
+        visited = [[False for j in range(self.COL)]for i in range(self.ROW)] 
+  
+        # Initialize count as 0 and travese  
+        # through the all cells of 
+        # given matrix 
+        count = 0
+        for i in range(self.ROW): 
+            for j in range(self.COL): 
+                # If a cell with value 1 is not visited yet,  
+                # then new island found 
+                if visited[i][j] == False and self.graph[i][j] == 1: 
+                    # Visit all cells in this island  
+                    # and increment island count 
+                    self.DFS(i, j, visited) 
+                    count += 1
+  
+        return count 
+  
+  
+graph = [[1, 1, 0, 0, 0], 
+        [0, 1, 0, 0, 1], 
+        [1, 0, 0, 1, 1], 
+        [0, 0, 0, 0, 0], 
+        [1, 0, 1, 0, 1]] 
+  
+  
+row = len(graph) 
+col = len(graph[0]) 
+  
+g = Graph(row, col, graph) 
+  
+print "Number of islands is:"
+print g.countIslands() 
+  
+# This code is contributed by Neelam Yadav 
 #=======================================================================================================================#
 
 
