@@ -1,157 +1,12 @@
-"""
-
-这道题让我们合并k个有序链表，
-最终合并出来的结果也必须是有序的，
-之前做过一道 Merge Two Sorted Lists，
-是混合插入两个有序链表。这道题增加了难度，
-变成合并k个有序链表了，但是不管合并几个，
-基本还是要两两合并。
-那么首先考虑的方法是能不能利用之前那道题的解法来解答此题。
-答案是肯定的，但是需要修改
-，怎么修改呢，最先想到的就是两两合并，
-就是前两个先合并，合并好了再跟第三个，
-然后第四个直到第k个。这样的思路是对的，
-但是效率不高，没法通过 
-OJ，所以只能换一种思路，
-这里就需要用到分治法 Divide and Conquer Approach。
-简单来说就是不停的对半划分，
-比如k个链表先划分为合并两个 k/2 个链表的任务，
-再不停的往下划分，
-直到划分成只有一个或两个链表的任务，
-开始合并。
-举个例子来说比如合并6个链表，
-那么按照分治法，
-首先分别合并0和3，
-1和4，
-2和5。
-这样下一次只需合并3个链表，
-再合并1和3，
-最后和2合并就可以了。
-代码中的k是通过 (n+1)/2 计算的，
-这里为啥要加1呢，
-这是为了当n为奇数的时候，
-k能始终从后半段开始，
-比如当 n=5 时，
-那么此时 k=3，
-则0和3合并，
-1和4合并，
-最中间的2空出来。
-当n是偶数的时候，
-加1也不会有影响，
-比如当 n=4 时，此时 k=2，
-那么0和2合并，
-1和3合并
-，完美解决问题，
-参见代码如下：
-
-"""
-
-# Q1: merge k sortedlists 
-
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
 
 
-#attempt 1: 
-class Solution:
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        if lists is None: 
-            return -1
-        n=len(lists)
-        while n>1: 
-            if n%2==1: 
-                mid=n//2
-                for i in range(n//2): 
-                    final= merge2lists(lists[i],list[n-i])
-                return merge2list(merge2lists(list[n//2],final)
-
-            else:
-                for i in range(n//2): 
-                    merge2lists(lists[i],list[n-i])
-
-
-            """
-
-            k=(n+1)//2 # both even and odd cases, get even/2 
-            for i in range(0,n//2): #at best n//2 will be equal to (n+1)//2, if not, smaller
-                merge2lists(lists[i],lists[]
-                
-            """
-
-        def merge2lists(self,a,b): 
-            if a and b: 
-                if a.val>b.val: 
-                    a,b=b,a 
-                a.next=self.merge2lists(a.next,b)
-            return a or b
-
-
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-
-#attempt 2: 
-class Solution:
-    
-    def merge2lists(self,a,b): 
-        
-        result = dummy = ListNode() 
-        while a: 
-            if b and a.val>b.val: 
-                dummy.next=b
-                b=b.next
-            else: 
-                dummy.next=a
-                a=a.next
-            dummy=dummy.next 
-        if b: 
-            dummy.next=b 
-        return result.next 
-        
-        """
-        if a and b: 
-            if a.val>b.val: 
-                a,b=b,a 
-            a.next=self.merge2lists(a.next,b)
-        return a or b
-    
-        """
-
-
-    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
-        if lists is None: 
-            return -1
-        n=len(lists)
-        if n==1:
-            final=lists
-        while n>1: 
-            if n%2==1: 
-                mid=n//2
-                for x in range(n//2): 
-                    for y in range(n//2, -1):
-                        e=self.merge2lists(lists[x],lists[y])
-                        
-                final=self.merge2lists(lists[mid],e)
-            if n%2==0:
-                for i in range(n//2): 
-                    final=self.merge2lists(lists[i],lists[n-i])
-        
-        return final
-
-
-#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========
+#=========#=========#=========#===                  Singly Linked Lists                  #=========#=========#=========#=========#=========
 #=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========
 
                                                     #      NOTES     #
 
 
-#singly linked lists 
+
 
 class Node:  # create a Node
     def __init__(self, data):
@@ -175,7 +30,6 @@ class LinkedList:
     def __init__(self):
         self.head = None  # initialize head to None
 
-
     def insert_tail(self, data) -> None:
         if self.head is None:
             self.insert_head(data)  # if this is first node, call insert_head
@@ -185,8 +39,10 @@ class LinkedList:
                 temp = temp.next
             temp.next = Node(data)  # create node & link to tail
 
+
+    #Given the head pointer, prepend a new node to the linked list
     def insert_head(self, data) -> None:
-        new_node = Node(data)  # create a new node
+        new_node = Node(data)  # create a new node, want it to embody the characteristics of a node 
         if self.head:
             new_node.next = self.head  # link new_node to head
         self.head = new_node  # make NewNode as head
@@ -203,6 +59,18 @@ class LinkedList:
             self.head = self.head.next
             temp.next = None
         return temp
+
+    def removenode(self):
+        predNode=None 
+        curNode=self.head
+        while curNode is not None and curNode.data!=target: 
+            preNode=curNode #preNode is always one node before curNode
+            curNode=curNode.next 
+        if curNode is not None: 
+            if curNode is head: #important exception case 
+                head=curNode.next 
+            else: 
+                preNode.next=curNode.next
 
     def delete_tail(self):  # delete from tail
         temp = self.head
@@ -305,7 +173,78 @@ def main():
 if __name__ == "__main__":
     main()
 
+
+#=========#=========#=========#=========  Usage of dummies   =========#=========#=========#=========#=========#=========
 #=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========
+
+
+class Solution(object):
+    def swapPairs(self, head):
+        if not head or not head.next: return head
+        dummy = ListNode(0)
+        dummy.next = head
+        cur = dummy
+        
+        while cur.next and cur.next.next:
+            first = cur.next
+            sec = cur.next.next
+            cur.next = sec
+            first.next = sec.next
+            sec.next = first
+            cur = cur.next.next
+        return dummy.next  
+
+#=========#=========#=========#=========   Stacks, linked list implementations   =========#=========#=========#=========#=========#=========
+#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========
+
+
+
+class Node: 
+
+
+    def __init__(self,data): 
+        self.data=data 
+        self.next=None 
+
+class Stack:
+
+    def __init__(self): 
+        self.head=None #first node is none 
+
+    def isEmpty(self): #check if the link list is empty 
+        if self.head==None: 
+            return True
+        else:
+            return False 
+
+    def push(self,data): 
+        if self.head == None: #base case
+            self.head=Node(data)
+        else: 
+            newnode=Node(data)
+            newnode.next=self.head
+
+    def pop(self):
+        if self.isEmpty(): #base case 
+            return None 
+        poppednode=self.head
+        self.head=self.head.next #notice, not poppednode.next
+        poppednode.next=None 
+        return poppednode.data
+    
+    def peek(self): 
+        if self.head!=None: 
+            return self.head.data
+
+    def display(self): 
+        if not self.isEmpty(): 
+            curr=self.head
+            while curr: 
+                print(curr.data, "->", end = " ")
+                curr=curr.next 
+
+        
+#=========#=========#=========#=========#=========   Circular Linked Lists  ====#=========#=========#=========#=========#=========#=========
 #=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========
 
 from typing import Any
@@ -492,3 +431,328 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
+
+
+#=========#=========#=========#=========#=========#       Questions examples     =========#=========#=========#=========#=========#=========
+#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========#=========
+
+
+
+#print the middle of a given linked list
+#2 traversals solution 
+
+
+
+class Node: 
+
+
+    def __init__(self,data): 
+        self.data=data 
+        self.next=None 
+
+
+class LinkedList:
+    def __init__(self):
+        self.head = None  # initialize head to None
+
+    def push(self, new_data): 
+        new_node = Node(new_data) 
+        new_node.next = self.head 
+        self.head = new_node 
+
+    def printMiddle(self): 
+        if self.head is None: 
+            return None 
+        else:
+            curr=self.head 
+            count=0
+            while curr: 
+                count+=1
+                curr=curr.next 
+            half=count//2 
+            current=self.head
+            while current and half>0: 
+                current=current.next
+                half-=1
+            return print(current.data)
+
+list1 = LinkedList() 
+list1.push(5) 
+list1.push(4) 
+list1.push(2) 
+list1.push(3) 
+list1.push(1) 
+list1.printMiddle() 
+
+
+
+#1 traversal solution: use 2 pointers, one fast, one slow, when the fast ends, the slow 
+#will reach the middle of the linked list 
+class Node: 
+
+    def __init__(self,data): 
+        self.data=data
+        self.next=None
+
+
+
+class LinkedList: 
+
+    def __init__(self): 
+        self.head=None 
+
+    def push(self, new_data): 
+        new_node = Node(new_data) 
+        new_node.next = self.head 
+        self.head = new_node 
+
+    def printMiddle(self): 
+        if self.head is None: 
+            return None  
+        else: 
+            curri=self.head 
+            currj=self.head
+            while curri and currj and currj.next: 
+                curri=curri.next
+                currj=currj.next.next
+
+        return print(curri.data)
+
+list1 = LinkedList() 
+list1.push(5) 
+list1.push(4) 
+list1.push(2) 
+list1.push(3) 
+list1.push(1) 
+list1.printMiddle() 
+
+#===================            Swap Nodes in Pairs           ==================# 
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if self.head is None: 
+            return None  
+        else:
+            curr=self.head 
+            while curr: 
+                a=curr.next
+                b=curr
+                a=b
+                b=a
+                curr=curr.next.next
+
+            return ListNode(curr).val
+
+
+class Solution(object):
+    def swapPairs(self, head):
+        if not head or not head.next: return head
+        dummy = ListNode(0)
+        dummy.next = head
+        cur = dummy
+        
+        while cur.next and cur.next.next:
+            first = cur.next
+            sec = cur.next.next
+            cur.next = sec
+            first.next = sec.next
+            sec.next = first
+            cur = cur.next.next
+        return dummy.next  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    """
+Leetcode merge K sorted Lists 
+
+这道题让我们合并k个有序链表，
+最终合并出来的结果也必须是有序的，
+之前做过一道 Merge Two Sorted Lists，
+是混合插入两个有序链表。这道题增加了难度，
+变成合并k个有序链表了，但是不管合并几个，
+基本还是要两两合并。
+那么首先考虑的方法是能不能利用之前那道题的解法来解答此题。
+答案是肯定的，但是需要修改
+，怎么修改呢，最先想到的就是两两合并，
+就是前两个先合并，合并好了再跟第三个，
+然后第四个直到第k个。这样的思路是对的，
+但是效率不高，没法通过 
+OJ，所以只能换一种思路，
+这里就需要用到分治法 Divide and Conquer Approach。
+简单来说就是不停的对半划分，
+比如k个链表先划分为合并两个 k/2 个链表的任务，
+再不停的往下划分，
+直到划分成只有一个或两个链表的任务，
+开始合并。
+举个例子来说比如合并6个链表，
+那么按照分治法，
+首先分别合并0和3，
+1和4，
+2和5。
+这样下一次只需合并3个链表，
+再合并1和3，
+最后和2合并就可以了。
+代码中的k是通过 (n+1)/2 计算的，
+这里为啥要加1呢，
+这是为了当n为奇数的时候，
+k能始终从后半段开始，
+比如当 n=5 时，
+那么此时 k=3，
+则0和3合并，
+1和4合并，
+最中间的2空出来。
+当n是偶数的时候，
+加1也不会有影响，
+比如当 n=4 时，此时 k=2，
+那么0和2合并，
+1和3合并
+，完美解决问题，
+参见代码如下：
+
+"""
+
+# Q1: merge k sortedlists 
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+
+#attempt 1: 
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if lists is None: 
+            return -1
+        n=len(lists)
+        while n>1: 
+            if n%2==1: 
+                mid=n//2
+                for i in range(n//2): 
+                    final= merge2lists(lists[i],list[n-i])
+                return merge2list(merge2lists(list[n//2],final)
+
+            else:
+                for i in range(n//2): 
+                    merge2lists(lists[i],list[n-i])
+
+
+            """
+
+            k=(n+1)//2 # both even and odd cases, get even/2 
+            for i in range(0,n//2): #at best n//2 will be equal to (n+1)//2, if not, smaller
+                merge2lists(lists[i],lists[]
+                
+            """
+
+        def merge2lists(self,a,b): 
+            if a and b: 
+                if a.val>b.val: 
+                    a,b=b,a 
+                a.next=self.merge2lists(a.next,b)
+            return a or b
+
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+
+#attempt 2: 
+class Solution:
+    
+    def merge2lists(self,a,b): 
+        
+        result = dummy = ListNode() 
+        while a: 
+            if b and a.val>b.val: 
+                dummy.next=b
+                b=b.next
+            else: 
+                dummy.next=a
+                a=a.next
+            dummy=dummy.next 
+        if b: 
+            dummy.next=b 
+        return result.next 
+        
+        """
+        if a and b: 
+            if a.val>b.val: 
+                a,b=b,a 
+            a.next=self.merge2lists(a.next,b)
+        return a or b
+    
+        """
+
+
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        if lists is None: 
+            return -1
+        n=len(lists)
+        if n==1:
+            final=lists
+        while n>1: 
+            if n%2==1: 
+                mid=n//2
+                for x in range(n//2): 
+                    for y in range(n//2, -1):
+                        e=self.merge2lists(lists[x],lists[y])
+                        
+                final=self.merge2lists(lists[mid],e)
+            if n%2==0:
+                for i in range(n//2): 
+                    final=self.merge2lists(lists[i],lists[n-i])
+        
+        return final
+
+
+"""
+Given a non-empty, singly linked list with head node head, return a middle node of linked list.
+
+If there are two middle nodes, return the second middle node
+
+"""
+
+    def deleteDuplicates(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        
+        dummy = ListNode(0);  # construct a dummy node
+        dummy.next = head 
+
+        pre = dummy           # set up pre and cur pointers
+        cur = head
+        while cur:
+            if cur.next and cur.val == cur.next.val:
+                # loop until cur point to the last duplicates
+                while cur and cur.next and cur.val == cur.next.val:
+                    cur = cur.next
+                pre.next = cur.next  # propose the next for pre
+                                     # this will be verified by next line
+            else:
+                pre = pre.next 
+            cur = cur.next
+        return dummy.next
