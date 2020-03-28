@@ -615,6 +615,79 @@ print(largestRegion(M))
   
 # This code is contributed by PranchalK 
 
+#=======================================================================================================================#
+#=======================================================================================================================#
+
+
+#Definition for a undirected graph node
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = []):
+        self.val = val
+        self.neighbors = neighbors
+"""
+
+class Solution:
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        if not node:
+            return 
+        nodeCopy = Node(node.val)
+        dic = {node: nodeCopy}
+        queue = collections.deque([node])
+        while queue:
+            node = queue.popleft()
+            for neighbor in node.neighbors:
+                if neighbor not in dic: # neighbor is not visited
+                    neighborCopy = Node(neighbor.val)
+                    dic[neighbor] = neighborCopy
+                    dic[node].neighbors.append(neighborCopy)
+                    queue.append(neighbor)
+                else:
+                    dic[node].neighbors.append(dic[neighbor])
+        return nodeCopy
+    
+
+#==========================================================================================#
+
+# DFS iteratively
+def cloneGraph2(self, node):
+    if not node:
+        return 
+    nodeCopy = UndirectedGraphNode(node.label)
+    dic = {node: nodeCopy}
+    stack = [node]
+    while stack:
+        node = stack.pop()
+        for neighbor in node.neighbors:
+            if neighbor not in dic:
+                neighborCopy = UndirectedGraphNode(neighbor.label)
+                dic[neighbor] = neighborCopy
+                dic[node].neighbors.append(neighborCopy)
+                stack.append(neighbor)
+            else:
+                dic[node].neighbors.append(dic[neighbor])
+    return nodeCopy
+    
+# DFS recursively
+def cloneGraph(self, node):
+    if not node:
+        return 
+    nodeCopy = UndirectedGraphNode(node.label)
+    dic = {node: nodeCopy}
+    self.dfs(node, dic)
+    return nodeCopy
+    
+def dfs(self, node, dic):
+    for neighbor in node.neighbors:
+        if neighbor not in dic:
+            neighborCopy = UndirectedGraphNode(neighbor.label)
+            dic[neighbor] = neighborCopy
+            dic[node].neighbors.append(neighborCopy)
+            self.dfs(neighbor, dic)
+        else:
+            dic[node].neighbors.append(dic[neighbor])
+
 
 
 """
@@ -821,3 +894,5 @@ def find_isolated_nodes(graph):
         if not graph[node]:
             isolated.append(node)
     return isolated
+
+
