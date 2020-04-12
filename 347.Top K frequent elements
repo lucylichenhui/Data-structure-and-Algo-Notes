@@ -1,0 +1,26 @@
+
+#347. Top K Frequent Elements
+
+def keywithmaxval(d):
+    v=list(d.values())
+    k=list(d.keys())
+    return k[v.index(max(v))]
+
+class Solution(object):
+    def frequencySort(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        sol=""
+        d=defaultdict(int)
+        for w in s: 
+            d[w]+=1 
+
+        while k:
+            maxkey=keywithmaxval(d)
+            sol+=maxkey*d[maxkey]
+            del d[maxkey]
+            k-=1
+
+        return sol
