@@ -13,9 +13,6 @@ instance=input()
 num=input()
 for i in range(num): 
     averageutil.append(input())
-
-#print(averageutil)
-
 for i in range(len(averageutil)): 
     if averageutil[i]>60 and instance*2<=2*10**8: 
         instance=instance*2
