@@ -1,0 +1,41 @@
+# https://leetcode.com/problems/largest-divisible-subset/
+
+from collections import defaultdict
+
+
+def check_satisfies(l:list):
+    """
+    Takes in an ordered list l 
+    and checks if every item in this list
+    satisfies the condition
+    """
+    for i in range(1, len(l)):
+        if l[i]%l[i-1] != 0:
+            return False
+    return True
+
+
+numlist = []
+max_len = 0
+
+def make_subsets(nums:list):
+    global numlist
+    global max_len
+    if check_satisfies(nums):
+        if len(nums)>max_len:
+            max_len = len(nums)
+            numlist = nums
+        return nums
+    else:
+        for i in range(len(nums)):
+            make_subsets([nums[a] for a in range(len(nums)) if a!=i])
+    
+
+class Solution:
+    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+        nums = sorted(nums)
+        make_subsets(nums)
+        
+        return numlist
+    
+
