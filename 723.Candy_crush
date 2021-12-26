@@ -1,0 +1,43 @@
+
+# https://leetcode.com/problems/candy-crush/
+# 723. Candy Crush
+
+class Solution:
+    def candyCrush(self, board: List[List[int]]) -> List[List[int]]:
+        
+        fix = False
+        
+        height = len(board)
+        width = len(board[0])
+        
+
+        for i in range(height):
+            for j in range(width-2):
+                if abs(board[i][j]) == abs(board[i][j+1]) == abs(board[i][j+2]) !=0:
+                    board[i][j] = board[i][j+1] = board[i][j+2] = -abs(board[i][j])
+                    fix = True
+
+        for i in range(height-2):
+            for j in range(width):
+                if abs(board[i][j]) == abs(board[i+1][j]) == abs(board[i+2][j]) !=0:
+                    board[i][j] = board[i+1][j] = board[i+2][j] = -abs(board[i][j])
+                    fix = True
+        
+        print(board)
+    
+        for j in range(width):
+            stack = []
+            for i in range(height-1, -1, -1):
+                if board[i][j]>0: # uncrushed
+                    stack.append(board[i][j])
+            if len(stack) < height:
+                extra = [0]*(height-len(stack))
+                extra.extend(stack[::-1])
+                for i in range(height):
+                    board[i][j] = extra[i]
+        
+        return self.candyCrush(board) if fix else board
+                
+                    
+                
+        
